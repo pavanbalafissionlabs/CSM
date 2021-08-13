@@ -9,7 +9,7 @@ from flask import Blueprint
 post_posts = Blueprint('posts', __name__)
 
 
-@post_posts.route('/user/post/addpost', methods=['POST'])
+@post_posts.route('/addcontent', methods=['POST'])
 def add_Post():
     user = User.query.filter_by(
         email=request.authorization.get('username')).first()
@@ -40,3 +40,27 @@ def add_Post():
                  "Tags": "Tags"}
              }
         return jsonify(a), 404
+
+
+@post_posts.route('/login', methods=['POST'])
+def login():
+    email = request.json['email']
+    password = request.json['password']
+
+    user = User.query.filter_by(email=email).first()
+    print(user)
+    if (user and bcrypt.check_password_hash(user.password, password)):
+
+        all_post = user.post
+        get_yourPosts = []
+        for user in all_post:
+            results = {}
+            results["Title"] = user.Title
+            results["Body"] = user.Body
+            results["Summary"] = user.Summary
+            get_yourPosts.append(results)
+        return jsonify(get_yourPosts), 200
+    else:
+        return jsonify({"login": "you login details are invalid",
+                        "required": {"email": "enter a valid user name",
+                                     "password": "enter a valid password"}}), 404

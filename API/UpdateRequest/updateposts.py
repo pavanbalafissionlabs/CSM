@@ -9,8 +9,8 @@ import json
 update_posts = Blueprint('update_posts', __name__)
 
 
-@update_posts.route('/user/post/<id>', methods=['PUT'])
-def UpdatePost(id):
+@update_posts.route('/content/<id>', methods=['PUT'])
+def EditContent(id):
     user = User.query.filter_by(
         email=request.authorization.get('username')).first()
     try:
@@ -26,24 +26,25 @@ def UpdatePost(id):
                 editpost.PostTags = json.dumps(request.json.get(
                     'PostTags'))if request.json.get('PostTags') else editpost.PostTags
                 db.session.commit()
-                return jsonify({'Title': editpost.Title, 'Body': editpost.Body, "Summary": editpost.Summary, "PostTags": json.loads(editpost.PostTags), "author": editpost.author.email}), 200
+                return jsonify({'Title': editpost.Title, 'Body': editpost.Body, "Summary": editpost.Summary,
+                                "PostTags": json.loads(editpost.PostTags), "author": editpost.author.email}), 200
             else:
                 return jsonify({'error': "You can edit only your posts"})
         else:
             return jsonify({"error": "not authorized"}), 401
     except Exception as e:
-        a = {"Required": {
-             "Title": "Should be title",
-             "Body": "Should be Body",
-             "summary": "Summary "},
-             "Optional": {
-                 "Tags": "Tags"
+        error = {"Required": {
+            "Title": "Should be title",
+            "Body": "Should be Body",
+            "summary": "Summary "},
+            "Optional": {
+            "Tags": "Tags"
         }
         }
-        return jsonify(a), 404
+        return jsonify(error), 404
 
 
-@update_posts.route('/post/upload/document/<id>', methods=['PUT'])
+@update_posts.route('/uploadDocument/<id>', methods=['PUT'])
 def uploadDocument(id):
     editpost = Content.query.get(id)
     try:
@@ -56,6 +57,6 @@ def uploadDocument(id):
         db.session.commit()
         return jsonify({"uploaded": True, "filename": editpost.Filename}), 200
     except Exception as e:
-        print("ëeeeeeeeeeeeeeee", e)
-        a = {"error": "file not found"}
-        return jsonify(a), 404
+
+        error = {"error": "file not found"}
+        return jsonify(error), 404

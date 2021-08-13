@@ -9,8 +9,8 @@ from flask import Blueprint
 user_register = Blueprint('user_register', __name__)
 
 
-@user_register.route('/Registeruser', methods=['POST'])
-def add_User():
+@user_register.route('/Register', methods=['POST'])
+def Register():
     try:
 
         email = request.json['email']
@@ -22,7 +22,7 @@ def add_User():
         Country = request.json['Country']
         Pincode = request.json['Pincode']
         Phone = request.json['Phone']
-        print(type(Phone))
+
         error = None
 
         if not ((isinstance(Phone, int)) and len(str(Phone)) == 10):

@@ -1,0 +1,8 @@
+csm_env/*
+API/DeleteRequest/__pycache__
+API/GetRequest/__pycache__
+API/PostRequest/__pycache__
+API/Search/__pycache__
+API/UpdateRequest/__pycache__
+API/UserRegister/__pycache__
+API/CMS.db

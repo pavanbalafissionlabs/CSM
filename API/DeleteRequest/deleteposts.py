@@ -7,8 +7,8 @@ from flask import Blueprint
 delete_posts = Blueprint('delete', __name__)
 
 
-@delete_posts.route('/post/delete/<id>', methods=['DELETE'])
-def del_Post(id):
+@delete_posts.route('/delete/<id>', methods=['DELETE'])
+def deletepost(id):
     try:
         user = User.query.filter_by(
             email=request.authorization.get('username')).first()
@@ -16,14 +16,14 @@ def del_Post(id):
             deletepost = Content.query.get(id)
             if user.email == deletepost.author.email:
                 outer = []
-                d = {}
-                d['id'] = deletepost.id
-                d['Title'] = deletepost.Title
-                d['Body'] = deletepost.Body
-                d['Summary'] = deletepost.Summary
+                dict = {}
+                dict['id'] = deletepost.id
+                dict['Title'] = deletepost.Title
+                dict['Body'] = deletepost.Body
+                dict['Summary'] = deletepost.Summary
                 db.session.delete(deletepost)
                 db.session.commit()
-                outer.append(d)
+                outer.append(dict)
                 print(outer)
                 return jsonify(outer), 200
             else:
